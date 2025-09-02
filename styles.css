@@ -222,12 +222,6 @@ body {
     position: relative;
 }
 
-/* Sticky Header Container - just for grouping, not sticky itself */
-.sticky-header-container {
-    background: transparent;
-    margin-bottom: 1rem;
-}
-
 /* Search Section */
 .search-section {
     background: var(--bg-white);
@@ -239,6 +233,18 @@ body {
     position: sticky;
     top: 80px;
     z-index: 50;
+}
+
+/* Add solid background behind sticky element */
+.search-section::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    z-index: -1;
 }
 
 .search-box {
@@ -291,6 +297,17 @@ body {
     position: sticky;
     top: 165px;
     z-index: 45;
+}
+
+.active-filters-container::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    z-index: -1;
 }
 
 .active-filters-label {
@@ -366,6 +383,17 @@ body {
     position: sticky;
     top: 230px;
     z-index: 40;
+}
+
+.results-header::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    z-index: -1;
 }
 
 .results-header h2 {
