@@ -450,32 +450,6 @@ function sortCourses() {
     displayCourses();
 }
 
-// Quick filters
-function applyQuickFilter(filter) {
-    // Clear all filters first
-    document.querySelectorAll('.filter-option input').forEach(cb => cb.checked = false);
-    
-    switch(filter) {
-        case 'beginner':
-            document.querySelector('#level-filters input[value="Beginner"]').checked = true;
-            break;
-        case 'virtual':
-            document.querySelector('#delivery-filters input[value="Virtual"]').checked = true;
-            break;
-        case 'accessibility':
-            document.querySelector('#category-filters input[value="Accessibility"]').checked = true;
-            break;
-        case 'disaster':
-            const disasterCheckbox = document.querySelector('#category-filters input[value="Disaster Services"]');
-            if (disasterCheckbox) disasterCheckbox.checked = true;
-            break;
-        case 'under-4h':
-            document.querySelector('#duration-filters input[value="4"]').checked = true;
-            break;
-    }
-    
-    applyFilters();
-}
 
 // Clear all filters
 function clearAllFilters() {
@@ -497,10 +471,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Sort functionality
     document.getElementById('sort-select').addEventListener('change', sortCourses);
     
-    // Quick filters
-    document.querySelectorAll('.quick-filter').forEach(btn => {
-        btn.addEventListener('click', () => applyQuickFilter(btn.dataset.filter));
-    });
     
     // Clear filters
     document.getElementById('clear-filters').addEventListener('click', clearAllFilters);

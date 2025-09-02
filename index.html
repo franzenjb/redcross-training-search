@@ -12,7 +12,7 @@
 <body>
     <!-- Header -->
     <header class="header">
-        <div class="container">
+        <div class="container-fluid">
             <div class="header-content">
                 <div class="logo-section">
                     <svg class="logo" width="40" height="40" viewBox="0 0 100 100">
@@ -39,40 +39,11 @@
         </div>
     </header>
 
-    <!-- Search Section -->
-    <section class="search-section">
-        <div class="container">
-            <div class="search-box">
-                <input type="text" id="search-input" placeholder="Search courses by name, description, or tags..." autocomplete="off">
-                <button id="search-btn" aria-label="Search">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <path d="m21 21-4.35-4.35"></path>
-                    </svg>
-                </button>
-            </div>
-            <div class="quick-filters">
-                <button class="quick-filter" data-filter="beginner">🟢 Beginner</button>
-                <button class="quick-filter" data-filter="virtual">💻 Virtual</button>
-                <button class="quick-filter" data-filter="accessibility">♿ Accessibility</button>
-                <button class="quick-filter" data-filter="disaster">🚨 Disaster Response</button>
-                <button class="quick-filter" data-filter="under-4h">⏱️ Under 4 Hours</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Main Content -->
-    <main class="main-content">
-        <div class="container">
-            <!-- Active Filters Breadcrumb -->
-            <div id="active-filters" class="active-filters-container" style="display: none;">
-                <span class="active-filters-label">Active Filters:</span>
-                <div id="active-filters-list" class="active-filters-list"></div>
-                <button id="clear-all-filters" class="clear-all-btn">Clear All</button>
-            </div>
-            
-            <div class="content-wrapper">
-                <!-- Sidebar Filters -->
+    <!-- Main Layout Container -->
+    <div class="main-layout">
+        <div class="container-fluid">
+            <div class="top-section">
+                <!-- Left: Filters -->
                 <aside class="filters-sidebar">
                     <div class="filter-section">
                         <h3>Category</h3>
@@ -116,6 +87,10 @@
                                 <input type="checkbox" value="Blended">
                                 <span>🔄 Blended</span>
                             </label>
+                            <label class="filter-option">
+                                <input type="checkbox" value="Various">
+                                <span>📋 Various</span>
+                            </label>
                         </div>
                     </div>
                     
@@ -144,8 +119,29 @@
                     <button id="clear-filters" class="clear-filters-btn">Clear All Filters</button>
                 </aside>
 
-                <!-- Course Grid -->
-                <div class="courses-container">
+                <!-- Right: Search and Content -->
+                <div class="content-area">
+                    <!-- Search Section -->
+                    <div class="search-section">
+                        <div class="search-box">
+                            <input type="text" id="search-input" placeholder="Search courses by name, description, or tags..." autocomplete="off">
+                            <button id="search-btn" aria-label="Search">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <path d="m21 21-4.35-4.35"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Active Filters Breadcrumb -->
+                    <div id="active-filters" class="active-filters-container" style="display: none;">
+                        <span class="active-filters-label">Active Filters:</span>
+                        <div id="active-filters-list" class="active-filters-list"></div>
+                        <button id="clear-all-filters" class="clear-all-btn">Clear All</button>
+                    </div>
+
+                    <!-- Results Header -->
                     <div class="results-header">
                         <h2 id="results-title">All Courses</h2>
                         <div class="sort-controls">
@@ -158,9 +154,12 @@
                             </select>
                         </div>
                     </div>
+
+                    <!-- Course Grid -->
                     <div id="courses-grid" class="courses-grid">
                         <!-- Course cards will be inserted here -->
                     </div>
+                    
                     <div id="no-results" class="no-results" style="display: none;">
                         <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ccc">
                             <circle cx="11" cy="11" r="8"></circle>
@@ -173,7 +172,7 @@
                 </div>
             </div>
         </div>
-    </main>
+    </div>
 
     <!-- Learning Paths Modal -->
     <div id="learning-paths-modal" class="modal">
