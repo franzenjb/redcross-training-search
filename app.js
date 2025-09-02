@@ -288,6 +288,9 @@ function applyFilters() {
     const selectedDelivery = Array.from(document.querySelectorAll('#delivery-filters input:checked')).map(cb => cb.value);
     const selectedDurations = Array.from(document.querySelectorAll('#duration-filters input:checked')).map(cb => parseInt(cb.value));
     
+    // Update breadcrumb trail
+    updateActiveFilters(searchTerm, selectedCategories, selectedLevels, selectedDelivery, selectedDurations);
+    
     // Start with search results or all courses
     let results = searchTerm ? 
         allCourses.filter(course => {
@@ -326,6 +329,98 @@ function applyFilters() {
     
     filteredCourses = results;
     displayCourses();
+}
+
+// Update active filters breadcrumb
+function updateActiveFilters(searchTerm, categories, levels, delivery, durations) {
+    const container = document.getElementById('active-filters');
+    const list = document.getElementById('active-filters-list');
+    
+    list.innerHTML = '';
+    let hasFilters = false;
+    
+    // Add search term
+    if (searchTerm) {
+        hasFilters = true;
+        const tag = createFilterTag('Search', searchTerm, () => {
+            document.getElementById('search-input').value = '';
+            applyFilters();
+        });
+        list.appendChild(tag);
+    }
+    
+    // Add category filters
+    categories.forEach(cat => {
+        hasFilters = true;
+        const tag = createFilterTag('Category', cat, () => {
+            document.querySelector(`#category-filters input[value="${cat}"]`).checked = false;
+            applyFilters();
+        });
+        list.appendChild(tag);
+    });
+    
+    // Add level filters
+    levels.forEach(level => {
+        hasFilters = true;
+        const tag = createFilterTag('Level', level, () => {
+            document.querySelector(`#level-filters input[value="${level}"]`).checked = false;
+            applyFilters();
+        });
+        list.appendChild(tag);
+    });
+    
+    // Add delivery filters
+    delivery.forEach(del => {
+        hasFilters = true;
+        const tag = createFilterTag('Delivery', del, () => {
+            document.querySelector(`#delivery-filters input[value="${del}"]`).checked = false;
+            applyFilters();
+        });
+        list.appendChild(tag);
+    });
+    
+    // Add duration filters
+    durations.forEach(dur => {
+        hasFilters = true;
+        let label = dur === 16 ? '> 8 hours' : `≤ ${dur} hours`;
+        const tag = createFilterTag('Duration', label, () => {
+            document.querySelector(`#duration-filters input[value="${dur}"]`).checked = false;
+            applyFilters();
+        });
+        list.appendChild(tag);
+    });
+    
+    // Show/hide container
+    container.style.display = hasFilters ? 'flex' : 'none';
+}
+
+// Create a filter tag element
+function createFilterTag(type, value, removeCallback) {
+    const tag = document.createElement('div');
+    tag.className = 'filter-tag';
+    
+    // Add icon based on type
+    let icon = '';
+    switch(type) {
+        case 'Search': icon = '🔍'; break;
+        case 'Category': icon = getCategoryIcon(value); break;
+        case 'Level': 
+            icon = value === 'Beginner' ? '🟢' : value === 'Intermediate' ? '🟡' : '🔴';
+            break;
+        case 'Delivery':
+            icon = getDeliveryIcon(value);
+            break;
+        case 'Duration': icon = '⏱️'; break;
+    }
+    
+    tag.innerHTML = `
+        <span>${icon} ${value}</span>
+        <span class="filter-tag-remove">✕</span>
+    `;
+    
+    tag.querySelector('.filter-tag-remove').addEventListener('click', removeCallback);
+    
+    return tag;
 }
 
 // Sort courses
@@ -409,6 +504,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Clear filters
     document.getElementById('clear-filters').addEventListener('click', clearAllFilters);
+    document.getElementById('clear-all-filters').addEventListener('click', clearAllFilters);
     
     // Learning paths modal
     document.getElementById('learning-paths-btn').addEventListener('click', () => {
