@@ -222,13 +222,9 @@ body {
     position: relative;
 }
 
-/* Sticky Header Container */
+/* Sticky Header Container - just for grouping, not sticky itself */
 .sticky-header-container {
-    position: sticky;
-    top: 80px;
-    z-index: 50;
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    padding-bottom: 1rem;
+    background: transparent;
     margin-bottom: 1rem;
 }
 
@@ -237,9 +233,12 @@ body {
     background: var(--bg-white);
     padding: 1.5rem;
     border-radius: 8px;
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-md);
     margin-bottom: 1rem;
     border: 1px solid var(--border-color);
+    position: sticky;
+    top: 80px;
+    z-index: 50;
 }
 
 .search-box {
@@ -282,13 +281,16 @@ body {
     background: var(--bg-white);
     border-radius: 8px;
     padding: 1rem 1.5rem;
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-md);
     display: flex;
     align-items: center;
     gap: 1rem;
     flex-wrap: wrap;
     margin-bottom: 1rem;
     border: 1px solid var(--border-color);
+    position: sticky;
+    top: 165px;
+    z-index: 45;
 }
 
 .active-filters-label {
@@ -361,6 +363,9 @@ body {
     border-radius: 8px;
     box-shadow: var(--shadow-md);
     border: 1px solid var(--border-color);
+    position: sticky;
+    top: 230px;
+    z-index: 40;
 }
 
 .results-header h2 {
