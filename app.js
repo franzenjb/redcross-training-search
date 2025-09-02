@@ -475,6 +475,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Clear filters
     document.getElementById('clear-filters').addEventListener('click', clearAllFilters);
     document.getElementById('clear-all-filters').addEventListener('click', clearAllFilters);
+    document.getElementById('reset-filters').addEventListener('click', clearAllFilters);
     
     // Learning paths modal
     document.getElementById('learning-paths-btn').addEventListener('click', () => {

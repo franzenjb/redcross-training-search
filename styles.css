@@ -148,6 +148,40 @@ body {
     background: var(--text-secondary);
 }
 
+/* Filters Header with Reset */
+.filters-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--red-cross-red);
+}
+
+.filters-header h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.reset-btn {
+    padding: 0.3rem 0.8rem;
+    background: var(--bg-white);
+    color: var(--red-cross-red);
+    border: 1px solid var(--red-cross-red);
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.reset-btn:hover {
+    background: var(--red-cross-red);
+    color: white;
+}
+
 .filter-section {
     margin-bottom: 1.25rem;
 }
