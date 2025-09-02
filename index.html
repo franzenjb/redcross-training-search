@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Red Cross Training Search | Find Your Course</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <svg class="logo" width="40" height="40" viewBox="0 0 100 100">
+                        <rect width="100" height="100" fill="#ED1B2E"/>
+                        <rect x="35" y="10" width="30" height="80" fill="white"/>
+                        <rect x="10" y="35" width="80" height="30" fill="white"/>
+                    </svg>
+                    <div>
+                        <h1>Training Course Search</h1>
+                        <p class="tagline">American Red Cross Education Portal</p>
+                    </div>
+                </div>
+                <div class="header-stats">
+                    <div class="stat">
+                        <span class="stat-number" id="total-courses">0</span>
+                        <span class="stat-label">Total Courses</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number" id="bookmarked-count">0</span>
+                        <span class="stat-label">Bookmarked</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Search Section -->
+    <section class="search-section">
+        <div class="container">
+            <div class="search-box">
+                <input type="text" id="search-input" placeholder="Search courses by name, description, or tags..." autocomplete="off">
+                <button id="search-btn" aria-label="Search">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="quick-filters">
+                <button class="quick-filter" data-filter="beginner">🟢 Beginner</button>
+                <button class="quick-filter" data-filter="virtual">💻 Virtual</button>
+                <button class="quick-filter" data-filter="accessibility">♿ Accessibility</button>
+                <button class="quick-filter" data-filter="disaster">🚨 Disaster Response</button>
+                <button class="quick-filter" data-filter="under-4h">⏱️ Under 4 Hours</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="content-wrapper">
+                <!-- Sidebar Filters -->
+                <aside class="filters-sidebar">
+                    <div class="filter-section">
+                        <h3>Category</h3>
+                        <div id="category-filters" class="filter-group"></div>
+                    </div>
+                    
+                    <div class="filter-section">
+                        <h3>Skill Level</h3>
+                        <div id="level-filters" class="filter-group">
+                            <label class="filter-option">
+                                <input type="checkbox" value="Beginner">
+                                <span>🟢 Beginner</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" value="Intermediate">
+                                <span>🟡 Intermediate</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" value="Advanced">
+                                <span>🔴 Advanced</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-section">
+                        <h3>Delivery Method</h3>
+                        <div id="delivery-filters" class="filter-group">
+                            <label class="filter-option">
+                                <input type="checkbox" value="In-Person">
+                                <span>👥 In-Person</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" value="Virtual">
+                                <span>💻 Virtual</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" value="Self-Study">
+                                <span>📚 Self-Study</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" value="Blended">
+                                <span>🔄 Blended</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-section">
+                        <h3>Duration</h3>
+                        <div id="duration-filters" class="filter-group">
+                            <label class="filter-option">
+                                <input type="checkbox" value="2">
+                                <span>≤ 2 hours</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" value="4">
+                                <span>≤ 4 hours</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" value="8">
+                                <span>≤ 8 hours</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" value="16">
+                                <span>> 8 hours</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <button id="clear-filters" class="clear-filters-btn">Clear All Filters</button>
+                </aside>
+
+                <!-- Course Grid -->
+                <div class="courses-container">
+                    <div class="results-header">
+                        <h2 id="results-title">All Courses</h2>
+                        <div class="sort-controls">
+                            <label for="sort-select">Sort by:</label>
+                            <select id="sort-select">
+                                <option value="name">Name (A-Z)</option>
+                                <option value="level">Skill Level</option>
+                                <option value="duration">Duration</option>
+                                <option value="category">Category</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="courses-grid" class="courses-grid">
+                        <!-- Course cards will be inserted here -->
+                    </div>
+                    <div id="no-results" class="no-results" style="display: none;">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ccc">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                            <path d="M8 11h6"></path>
+                        </svg>
+                        <h3>No courses found</h3>
+                        <p>Try adjusting your filters or search terms</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Learning Paths Modal -->
+    <div id="learning-paths-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Recommended Learning Paths</h2>
+            <div class="learning-paths">
+                <div class="path-card">
+                    <h3>🚨 Disaster Response Volunteer</h3>
+                    <ol>
+                        <li>Deployment Fundamentals</li>
+                        <li>Shelter Operations Basics</li>
+                        <li>Emergency Communications</li>
+                        <li>Psychological First Aid</li>
+                    </ol>
+                </div>
+                <div class="path-card">
+                    <h3>♿ Accessibility Champion</h3>
+                    <ol>
+                        <li>Accessibility Bootcamp</li>
+                        <li>Accessibility for Content Creators</li>
+                        <li>Building Accessible Products</li>
+                        <li>All Things Color: Ensuring Accessible Design</li>
+                    </ol>
+                </div>
+                <div class="path-card">
+                    <h3>🏥 Health Services Provider</h3>
+                    <ol>
+                        <li>Basic Life Support</li>
+                        <li>First Aid Fundamentals</li>
+                        <li>Emergency Medical Response</li>
+                        <li>Disaster Health Services</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Course Detail Modal -->
+    <div id="course-modal" class="modal">
+        <div class="modal-content course-detail">
+            <span class="close-modal">&times;</span>
+            <div id="modal-course-content">
+                <!-- Course details will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Action Button -->
+    <button id="learning-paths-btn" class="fab" title="View Learning Paths">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+            <path d="M22 9V7h-2V5c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-2h2v-2h-2v-2h2v-2h-2V9h2zm-4 10H4V5h14v14zM6 13h5v4H6zm6-6h4v3h-4zM6 7h5v5H6zm6 4h4v6h-4z"/>
+        </svg>
+    </button>
+
+    <script src="courses-data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
