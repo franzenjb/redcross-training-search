@@ -335,6 +335,7 @@ function applyFilters() {
 function updateActiveFilters(searchTerm, categories, levels, delivery, durations) {
     const container = document.getElementById('active-filters');
     const list = document.getElementById('active-filters-list');
+    const clearBtn = document.getElementById('clear-all-filters');
     
     list.innerHTML = '';
     let hasFilters = false;
@@ -390,8 +391,13 @@ function updateActiveFilters(searchTerm, categories, levels, delivery, durations
         list.appendChild(tag);
     });
     
-    // Show/hide container
-    container.style.display = hasFilters ? 'flex' : 'none';
+    // Show/hide clear button and update list
+    if (hasFilters) {
+        clearBtn.style.display = 'block';
+    } else {
+        list.innerHTML = '<span class="no-filters">No filters applied</span>';
+        clearBtn.style.display = 'none';
+    }
 }
 
 // Create a filter tag element

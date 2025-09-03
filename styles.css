@@ -154,32 +154,35 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid var(--red-cross-red);
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .filters-header h3 {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--text-primary);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-secondary);
     margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .reset-btn {
-    padding: 0.3rem 0.8rem;
-    background: var(--bg-white);
-    color: var(--red-cross-red);
-    border: 1px solid var(--red-cross-red);
-    border-radius: 4px;
-    font-size: 0.8rem;
-    font-weight: 600;
+    padding: 0.25rem 0.6rem;
+    background: transparent;
+    color: var(--text-secondary);
+    border: none;
+    border-radius: 3px;
+    font-size: 0.75rem;
+    font-weight: 500;
     cursor: pointer;
     transition: var(--transition);
+    text-decoration: underline;
 }
 
 .reset-btn:hover {
-    background: var(--red-cross-red);
-    color: white;
+    color: var(--red-cross-red);
+    background: rgba(237, 27, 46, 0.05);
 }
 
 .filter-section {
@@ -355,6 +358,12 @@ body {
     gap: 0.5rem;
     flex-wrap: wrap;
     flex: 1;
+}
+
+.no-filters {
+    color: var(--text-secondary);
+    font-style: italic;
+    font-size: 0.85rem;
 }
 
 .filter-tag {
