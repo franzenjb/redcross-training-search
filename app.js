@@ -365,6 +365,12 @@ function performSearch() {
 
 // Apply filters
 function applyFilters() {
+    // Exit bookmarks view if filters are being applied
+    if (viewingBookmarks) {
+        viewingBookmarks = false;
+        document.getElementById('view-bookmarks-btn').classList.remove('active');
+    }
+    
     const searchTerm = document.getElementById('search-input').value.toLowerCase();
     
     // Get selected filters
@@ -546,8 +552,12 @@ function sortCourses() {
 function clearAllFilters() {
     document.querySelectorAll('.filter-option input').forEach(cb => cb.checked = false);
     document.getElementById('search-input').value = '';
-    filteredCourses = [...allCourses];
-    displayCourses();
+    
+    // Don't reset if we're viewing bookmarks
+    if (!viewingBookmarks) {
+        filteredCourses = [...allCourses];
+        displayCourses();
+    }
 }
 
 // Track bookmark view state
@@ -560,14 +570,14 @@ function toggleBookmarksView() {
     const title = document.getElementById('results-title');
     
     if (viewingBookmarks) {
+        // Clear search and filters UI
+        document.getElementById('search-input').value = '';
+        document.querySelectorAll('.filter-option input').forEach(cb => cb.checked = false);
+        
         // Show only bookmarked courses
         filteredCourses = allCourses.filter(course => bookmarkedCourses.has(course.id));
         btn.classList.add('active');
         title.textContent = `My Bookmarked Courses (${bookmarkedCourses.size})`;
-        
-        // Clear search and filters when viewing bookmarks
-        document.getElementById('search-input').value = '';
-        clearAllFilters();
     } else {
         // Show all courses
         filteredCourses = [...allCourses];
