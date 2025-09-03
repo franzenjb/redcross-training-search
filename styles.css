@@ -444,6 +444,64 @@ body {
     color: var(--text-primary);
 }
 
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.view-bookmarks-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: white;
+    color: var(--text-primary);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.view-bookmarks-btn:hover {
+    background: var(--background);
+    border-color: var(--red-cross-red);
+    color: var(--red-cross-red);
+}
+
+.view-bookmarks-btn.active {
+    background: var(--red-cross-red);
+    color: white;
+    border-color: var(--red-cross-red);
+}
+
+.view-bookmarks-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+.bookmarks-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    background: var(--red-cross-red);
+    color: white;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.view-bookmarks-btn.active .bookmarks-count {
+    background: white;
+    color: var(--red-cross-red);
+}
+
 .sort-controls {
     display: flex;
     align-items: center;

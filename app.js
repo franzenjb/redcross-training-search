@@ -20,7 +20,16 @@ function saveBookmarks() {
 
 // Update bookmark count in header
 function updateBookmarkCount() {
-    document.getElementById('bookmarked-count').textContent = bookmarkedCourses.size;
+    // Update the old bookmarked-count if it exists
+    const oldCount = document.getElementById('bookmarked-count');
+    if (oldCount) oldCount.textContent = bookmarkedCourses.size;
+    
+    // Update the new bookmarks count in the button
+    const bookmarksCount = document.getElementById('bookmarks-count');
+    if (bookmarksCount) {
+        bookmarksCount.textContent = bookmarkedCourses.size;
+        bookmarksCount.style.display = bookmarkedCourses.size > 0 ? 'inline-flex' : 'none';
+    }
 }
 
 // Load courses data
@@ -541,6 +550,34 @@ function clearAllFilters() {
     displayCourses();
 }
 
+// Track bookmark view state
+let viewingBookmarks = false;
+
+// Toggle bookmarks view
+function toggleBookmarksView() {
+    viewingBookmarks = !viewingBookmarks;
+    const btn = document.getElementById('view-bookmarks-btn');
+    const title = document.getElementById('results-title');
+    
+    if (viewingBookmarks) {
+        // Show only bookmarked courses
+        filteredCourses = allCourses.filter(course => bookmarkedCourses.has(course.id));
+        btn.classList.add('active');
+        title.textContent = `My Bookmarked Courses (${bookmarkedCourses.size})`;
+        
+        // Clear search and filters when viewing bookmarks
+        document.getElementById('search-input').value = '';
+        clearAllFilters();
+    } else {
+        // Show all courses
+        filteredCourses = [...allCourses];
+        btn.classList.remove('active');
+        title.textContent = 'All Courses';
+    }
+    
+    displayCourses();
+}
+
 // Initialize event listeners
 document.addEventListener('DOMContentLoaded', function() {
     // Load courses
@@ -552,6 +589,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Sort functionality
     document.getElementById('sort-select').addEventListener('change', sortCourses);
+    
+    // Bookmarks view button
+    const bookmarksBtn = document.getElementById('view-bookmarks-btn');
+    if (bookmarksBtn) {
+        bookmarksBtn.addEventListener('click', toggleBookmarksView);
+    }
     
     
     // Clear filters
