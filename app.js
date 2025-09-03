@@ -137,10 +137,27 @@ function displayCourses() {
         const hasPrereqs = course.prerequisites && course.prerequisites.length > 0;
         const courseCode = course.courseCode || '';
         
+        // Determine color class based on first digit of course code
+        let codeColorClass = '';
+        if (courseCode) {
+            // Extract first digit from course code (e.g., "ACCS 13001" -> "1")
+            const match = courseCode.match(/\d/);
+            if (match) {
+                const firstDigit = match[0];
+                if (firstDigit === '1') {
+                    codeColorClass = 'beginner-code';
+                } else if (firstDigit === '2') {
+                    codeColorClass = 'intermediate-code';
+                } else if (firstDigit === '3') {
+                    codeColorClass = 'advanced-code';
+                }
+            }
+        }
+        
         return `
         <div class="course-card" data-course-id="${course.id}">
             <div class="course-header">
-                ${courseCode ? `<span class="course-code">${courseCode}</span>` : ''}
+                ${courseCode ? `<span class="course-code ${codeColorClass}">${courseCode}</span>` : ''}
                 <h3>${course.name}</h3>
                 <button class="bookmark-btn ${bookmarkedCourses.has(course.id) ? 'bookmarked' : ''}" 
                         data-id="${course.id}" aria-label="Bookmark course">
@@ -208,8 +225,25 @@ function showCourseDetails(e) {
     
     const courseCode = course.courseCode || '';
     
+    // Determine color class based on first digit of course code
+    let codeColorClass = '';
+    if (courseCode) {
+        // Extract first digit from course code (e.g., "ACCS 13001" -> "1")
+        const match = courseCode.match(/\d/);
+        if (match) {
+            const firstDigit = match[0];
+            if (firstDigit === '1') {
+                codeColorClass = 'beginner-code';
+            } else if (firstDigit === '2') {
+                codeColorClass = 'intermediate-code';
+            } else if (firstDigit === '3') {
+                codeColorClass = 'advanced-code';
+            }
+        }
+    }
+    
     content.innerHTML = `
-        <h2>${courseCode ? `<span class="detail-code">${courseCode}:</span> ` : ''}${course.name}</h2>
+        <h2>${courseCode ? `<span class="detail-code ${codeColorClass}">${courseCode}:</span> ` : ''}${course.name}</h2>
         <div class="modal-meta">
             ${getLevelBadge(course.level)}
             <span class="delivery">${getDeliveryIcon(course.delivery)} ${course.delivery}</span>

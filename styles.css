@@ -513,7 +513,6 @@ body {
 }
 
 .course-code {
-    background: var(--red-cross-red);
     color: white;
     padding: 0.2rem 0.5rem;
     border-radius: 4px;
@@ -521,6 +520,24 @@ body {
     font-weight: 600;
     font-family: monospace;
     white-space: nowrap;
+}
+
+/* Course code colors based on first digit */
+.course-code.beginner-code {
+    background: var(--success-green);
+}
+
+.course-code.intermediate-code {
+    background: #F39C12;
+}
+
+.course-code.advanced-code {
+    background: var(--danger-red);
+}
+
+/* Default fallback color */
+.course-code:not(.beginner-code):not(.intermediate-code):not(.advanced-code) {
+    background: var(--red-cross-red);
 }
 
 .course-header h3 {
@@ -906,7 +923,6 @@ body {
 
 /* Modal Prerequisites and Related Courses */
 .detail-code {
-    background: var(--red-cross-red);
     color: white;
     padding: 0.2rem 0.5rem;
     border-radius: 4px;
@@ -914,6 +930,24 @@ body {
     font-weight: 600;
     font-family: monospace;
     margin-right: 0.5rem;
+}
+
+/* Detail code colors based on first digit */
+.detail-code.beginner-code {
+    background: var(--success-green);
+}
+
+.detail-code.intermediate-code {
+    background: #F39C12;
+}
+
+.detail-code.advanced-code {
+    background: var(--danger-red);
+}
+
+/* Default fallback color */
+.detail-code:not(.beginner-code):not(.intermediate-code):not(.advanced-code) {
+    background: var(--red-cross-red);
 }
 
 .prerequisites-section,
