@@ -26,7 +26,7 @@ function updateBookmarkCount() {
 // Load courses data
 async function loadCourses() {
     try {
-        const response = await fetch('courses.json');
+        const response = await fetch('courses-enhanced.json?v=3.0');
         allCourses = await response.json();
         filteredCourses = [...allCourses];
         
@@ -43,8 +43,19 @@ async function loadCourses() {
         loadBookmarks();
     } catch (error) {
         console.error('Error loading courses:', error);
-        // For GitHub Pages, we'll embed the data
-        loadEmbeddedData();
+        // Fall back to original courses.json if enhanced version not found
+        try {
+            const fallbackResponse = await fetch('courses.json');
+            allCourses = await fallbackResponse.json();
+            filteredCourses = [...allCourses];
+            document.getElementById('total-courses').textContent = allCourses.length;
+            initializeFilters();
+            displayCourses();
+            loadBookmarks();
+        } catch (fallbackError) {
+            console.error('Error loading fallback courses:', fallbackError);
+            loadEmbeddedData();
+        }
     }
 }
 
@@ -122,9 +133,14 @@ function displayCourses() {
     grid.style.display = 'grid';
     noResults.style.display = 'none';
     
-    grid.innerHTML = filteredCourses.map(course => `
+    grid.innerHTML = filteredCourses.map(course => {
+        const hasPrereqs = course.prerequisites && course.prerequisites.length > 0;
+        const courseCode = course.courseCode || '';
+        
+        return `
         <div class="course-card" data-course-id="${course.id}">
             <div class="course-header">
+                ${courseCode ? `<span class="course-code">${courseCode}</span>` : ''}
                 <h3>${course.name}</h3>
                 <button class="bookmark-btn ${bookmarkedCourses.has(course.id) ? 'bookmarked' : ''}" 
                         data-id="${course.id}" aria-label="Bookmark course">
@@ -133,6 +149,7 @@ function displayCourses() {
                     </svg>
                 </button>
             </div>
+            ${hasPrereqs ? '<div class="prereq-indicator" title="Has prerequisites">⚠️ Prerequisites Required</div>' : ''}
             <div class="course-meta">
                 ${getLevelBadge(course.level)}
                 <span class="delivery">${getDeliveryIcon(course.delivery)} ${course.delivery}</span>
@@ -145,7 +162,7 @@ function displayCourses() {
             <div class="course-type">${course.type}</div>
             <button class="view-details-btn" data-id="${course.id}">View Details</button>
         </div>
-    `).join('');
+    `}).join('');
     
     // Add event listeners to bookmark buttons
     document.querySelectorAll('.bookmark-btn').forEach(btn => {
@@ -189,8 +206,10 @@ function showCourseDetails(e) {
     const modal = document.getElementById('course-modal');
     const content = document.getElementById('modal-course-content');
     
+    const courseCode = course.courseCode || '';
+    
     content.innerHTML = `
-        <h2>${course.name}</h2>
+        <h2>${courseCode ? `<span class="detail-code">${courseCode}:</span> ` : ''}${course.name}</h2>
         <div class="modal-meta">
             ${getLevelBadge(course.level)}
             <span class="delivery">${getDeliveryIcon(course.delivery)} ${course.delivery}</span>
@@ -200,6 +219,28 @@ function showCourseDetails(e) {
             ${getCategoryIcon(course.category)} ${course.category}
         </div>
         <div class="modal-type">Type: ${course.type}</div>
+        
+        ${course.prerequisites && course.prerequisites.length > 0 ? `
+        <div class="prerequisites-section">
+            <h3>📚 Prerequisites</h3>
+            <p class="prereq-notice">You must complete the following course(s) before taking this one:</p>
+            <ul class="prereq-list">
+                ${course.prerequisites.map(prereq => `<li>${prereq}</li>`).join('')}
+            </ul>
+        </div>
+        ` : ''}
+        
+        ${course.prerequisiteFor && course.prerequisiteFor.length > 0 ? `
+        <div class="next-courses-section">
+            <h3>🎯 Next Steps</h3>
+            <p class="next-notice">After completing this course, you can take:</p>
+            <ul class="next-list">
+                ${course.prerequisiteFor.map(next => `
+                    <li>${next.code ? `<span class="inline-code">${next.code}</span> ` : ''}${next.name}</li>
+                `).join('')}
+            </ul>
+        </div>
+        ` : ''}
         
         <h3>Description</h3>
         <p>${course.description || 'No detailed description available.'}</p>
@@ -271,7 +312,8 @@ function performSearch() {
                    course.description.toLowerCase().includes(searchTerm) ||
                    course.category.toLowerCase().includes(searchTerm) ||
                    course.type.toLowerCase().includes(searchTerm) ||
-                   (course.tags && course.tags.some(tag => tag.toLowerCase().includes(searchTerm)));
+                   (course.tags && course.tags.some(tag => tag.toLowerCase().includes(searchTerm))) ||
+                   (course.courseCode && course.courseCode.toLowerCase().includes(searchTerm.toUpperCase()));
         });
     }
     
