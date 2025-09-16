@@ -32,11 +32,42 @@ function updateBookmarkCount() {
     }
 }
 
+// Detect language of a course based on its name and description
+function detectLanguage(course) {
+    const text = (course.name + ' ' + course.description).toLowerCase();
+    
+    // Spanish indicators - common words and patterns
+    const spanishPatterns = [
+        /\b(para|del|de la|de los|las|los|una|uno|con|sin|por|sobre|desde|hacia|hasta|entre|durante|mediante|ante|bajo|contra)\b/,
+        /\b(aspectos|básicos|capacitación|descripción|evaluación|fundamentos|introducción|operaciones|desastres|equipo|acción|detallada|daños|respuesta)\b/,
+        /\b(español|española|spanish)\b/,
+        /[áéíóúñü]/,  // Spanish accented characters
+        /\\u00[e-f][0-9a-f]/i  // Unicode escapes for Spanish characters
+    ];
+    
+    // Check if text contains Spanish patterns
+    const hasSpanish = spanishPatterns.some(pattern => pattern.test(text));
+    
+    // If the course has both languages indicated (Spanish title with English translation in parentheses)
+    if (hasSpanish || course.name.includes('\\u00')) {
+        return 'Spanish';
+    }
+    
+    return 'English';
+}
+
 // Load courses data
 async function loadCourses() {
     try {
         const response = await fetch('courses-enhanced.json?v=3.0');
         allCourses = await response.json();
+        
+        // Add language property to each course
+        allCourses = allCourses.map(course => ({
+            ...course,
+            language: detectLanguage(course)
+        }));
+        
         filteredCourses = [...allCourses];
         
         // Update total courses count
@@ -56,6 +87,13 @@ async function loadCourses() {
         try {
             const fallbackResponse = await fetch('courses.json');
             allCourses = await fallbackResponse.json();
+            
+            // Add language property to each course
+            allCourses = allCourses.map(course => ({
+                ...course,
+                language: detectLanguage(course)
+            }));
+            
             filteredCourses = [...allCourses];
             document.getElementById('total-courses').textContent = allCourses.length;
             initializeFilters();
@@ -378,9 +416,10 @@ function applyFilters() {
     const selectedLevels = Array.from(document.querySelectorAll('#level-filters input:checked')).map(cb => cb.value);
     const selectedDelivery = Array.from(document.querySelectorAll('#delivery-filters input:checked')).map(cb => cb.value);
     const selectedDurations = Array.from(document.querySelectorAll('#duration-filters input:checked')).map(cb => parseInt(cb.value));
+    const selectedLanguages = Array.from(document.querySelectorAll('#language-filters input:checked')).map(cb => cb.value);
     
     // Update breadcrumb trail
-    updateActiveFilters(searchTerm, selectedCategories, selectedLevels, selectedDelivery, selectedDurations);
+    updateActiveFilters(searchTerm, selectedCategories, selectedLevels, selectedDelivery, selectedDurations, selectedLanguages);
     
     // Start with search results or all courses
     let results = searchTerm ? 
@@ -389,6 +428,7 @@ function applyFilters() {
                    course.description.toLowerCase().includes(searchTerm) ||
                    course.category.toLowerCase().includes(searchTerm) ||
                    course.type.toLowerCase().includes(searchTerm) ||
+                   (course.courseCode && course.courseCode.toLowerCase().includes(searchTerm)) ||
                    (course.tags && course.tags.some(tag => tag.toLowerCase().includes(searchTerm)));
         }) : [...allCourses];
     
@@ -418,12 +458,17 @@ function applyFilters() {
         });
     }
     
+    // Apply language filter
+    if (selectedLanguages.length > 0) {
+        results = results.filter(course => selectedLanguages.includes(course.language));
+    }
+    
     filteredCourses = results;
     displayCourses();
 }
 
 // Update active filters breadcrumb
-function updateActiveFilters(searchTerm, categories, levels, delivery, durations) {
+function updateActiveFilters(searchTerm, categories, levels, delivery, durations, languages) {
     const container = document.getElementById('active-filters');
     const list = document.getElementById('active-filters-list');
     const clearBtn = document.getElementById('clear-all-filters');
@@ -481,6 +526,18 @@ function updateActiveFilters(searchTerm, categories, levels, delivery, durations
         });
         list.appendChild(tag);
     });
+    
+    // Add language filters
+    if (languages && languages.length > 0) {
+        languages.forEach(lang => {
+            hasFilters = true;
+            const tag = createFilterTag('Language', lang, () => {
+                document.querySelector(`#language-filters input[value="${lang}"]`).checked = false;
+                applyFilters();
+            });
+            list.appendChild(tag);
+        });
+    }
     
     // Show/hide clear button and update list
     if (hasFilters) {
@@ -643,6 +700,13 @@ document.addEventListener('DOMContentLoaded', function() {
 function loadEmbeddedData() {
     // This will be replaced with actual data
     allCourses = window.coursesData || [];
+    
+    // Add language property to each course
+    allCourses = allCourses.map(course => ({
+        ...course,
+        language: detectLanguage(course)
+    }));
+    
     filteredCourses = [...allCourses];
     document.getElementById('total-courses').textContent = allCourses.length;
     initializeFilters();
